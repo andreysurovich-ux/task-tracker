@@ -1,0 +1,13 @@
+# Секреты
+.env
+.env.*
+*.key
+*.pem
+
+# Служебные файлы системы и редактора
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.claude/
+*.log

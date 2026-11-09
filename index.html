@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Task Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <header class="header">
+      <h1>Task Tracker</h1>
+      <p class="subtitle">Личный список задач</p>
+    </header>
+
+    <form id="task-form" class="card add-form" autocomplete="off">
+      <input id="task-title" type="text" placeholder="Что нужно сделать?" aria-label="Название задачи" maxlength="200">
+      <select id="task-priority" aria-label="Приоритет">
+        <option value="high">Высокий</option>
+        <option value="medium" selected>Средний</option>
+        <option value="low">Низкий</option>
+      </select>
+      <button type="submit" class="btn-primary">Добавить</button>
+    </form>
+    <p id="form-error" class="form-error" hidden>Введите название задачи</p>
+
+    <section class="filters">
+      <div class="filter-group" id="status-filters" aria-label="Фильтр по статусу">
+        <button type="button" class="chip active" data-value="all">Все</button>
+        <button type="button" class="chip" data-value="new">Новые</button>
+        <button type="button" class="chip" data-value="progress">В работе</button>
+        <button type="button" class="chip" data-value="done">Готово</button>
+      </div>
+      <div class="filter-group" id="priority-filters" aria-label="Фильтр по приоритету">
+        <button type="button" class="chip active" data-value="all">Любой приоритет</button>
+        <button type="button" class="chip" data-value="high">Высокий</button>
+        <button type="button" class="chip" data-value="medium">Средний</button>
+        <button type="button" class="chip" data-value="low">Низкий</button>
+      </div>
+    </section>
+
+    <p id="counter" class="counter"></p>
+
+    <ul id="task-list" class="task-list"></ul>
+    <p id="empty" class="empty" hidden></p>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
