@@ -21,6 +21,11 @@
   box-sizing: border-box;
 }
 
+/* Спрятанное скрыто всегда, даже если у блока задан свой способ показа */
+[hidden] {
+  display: none !important;
+}
+
 body {
   margin: 0;
   background: var(--bg);
