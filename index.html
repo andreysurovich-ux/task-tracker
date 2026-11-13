@@ -9,41 +9,78 @@
 <body>
   <main class="container">
     <header class="header">
-      <h1>Task Tracker</h1>
-      <p class="subtitle">Личный список задач</p>
+      <div>
+        <h1>Task Tracker</h1>
+        <p class="subtitle">Личный список задач</p>
+      </div>
+      <button type="button" id="logout" class="btn-secondary" hidden>Выйти</button>
     </header>
 
-    <form id="task-form" class="card add-form" autocomplete="off">
-      <input id="task-title" type="text" placeholder="Что нужно сделать?" aria-label="Название задачи" maxlength="200">
-      <select id="task-priority" aria-label="Приоритет">
-        <option value="high">Высокий</option>
-        <option value="medium" selected>Средний</option>
-        <option value="low">Низкий</option>
-      </select>
-      <button type="submit" class="btn-primary">Добавить</button>
+    <!-- Вход -->
+    <form id="login-form" class="card auth-form" autocomplete="on" hidden>
+      <h2>Вход</h2>
+      <label>
+        Почта
+        <input id="login-email" type="email" autocomplete="username" required>
+      </label>
+      <label>
+        Пароль
+        <input id="login-password" type="password" autocomplete="current-password" required>
+      </label>
+      <p id="login-error" class="form-error" hidden></p>
+      <button type="submit" class="btn-primary">Войти</button>
     </form>
-    <p id="form-error" class="form-error" hidden>Введите название задачи</p>
 
-    <section class="filters">
-      <div class="filter-group" id="status-filters" aria-label="Фильтр по статусу">
-        <button type="button" class="chip active" data-value="all">Все</button>
-        <button type="button" class="chip" data-value="new">Новые</button>
-        <button type="button" class="chip" data-value="progress">В работе</button>
-        <button type="button" class="chip" data-value="done">Готово</button>
-      </div>
-      <div class="filter-group" id="priority-filters" aria-label="Фильтр по приоритету">
-        <button type="button" class="chip active" data-value="all">Любой приоритет</button>
-        <button type="button" class="chip" data-value="high">Высокий</button>
-        <button type="button" class="chip" data-value="medium">Средний</button>
-        <button type="button" class="chip" data-value="low">Низкий</button>
-      </div>
-    </section>
+    <!-- Новый пароль (по ссылке из письма) -->
+    <form id="password-form" class="card auth-form" hidden>
+      <h2>Задайте пароль</h2>
+      <p class="hint">Не короче 8 символов. Он понадобится для входа.</p>
+      <label>
+        Новый пароль
+        <input id="new-password" type="password" autocomplete="new-password" minlength="8" required>
+      </label>
+      <label>
+        Повторите пароль
+        <input id="new-password-repeat" type="password" autocomplete="new-password" minlength="8" required>
+      </label>
+      <p id="password-error" class="form-error" hidden></p>
+      <button type="submit" class="btn-primary">Сохранить пароль</button>
+    </form>
 
-    <p id="message" class="message" role="alert" hidden></p>
-    <p id="counter" class="counter"></p>
+    <!-- Задачи (только после входа) -->
+    <div id="app-view" hidden>
+      <form id="task-form" class="card add-form" autocomplete="off">
+        <input id="task-title" type="text" placeholder="Что нужно сделать?" aria-label="Название задачи" maxlength="200">
+        <select id="task-priority" aria-label="Приоритет">
+          <option value="high">Высокий</option>
+          <option value="medium" selected>Средний</option>
+          <option value="low">Низкий</option>
+        </select>
+        <button type="submit" class="btn-primary">Добавить</button>
+      </form>
+      <p id="form-error" class="form-error" hidden>Введите название задачи</p>
 
-    <ul id="task-list" class="task-list"></ul>
-    <p id="empty" class="empty" hidden></p>
+      <section class="filters">
+        <div class="filter-group" id="status-filters" aria-label="Фильтр по статусу">
+          <button type="button" class="chip active" data-value="all">Все</button>
+          <button type="button" class="chip" data-value="new">Новые</button>
+          <button type="button" class="chip" data-value="progress">В работе</button>
+          <button type="button" class="chip" data-value="done">Готово</button>
+        </div>
+        <div class="filter-group" id="priority-filters" aria-label="Фильтр по приоритету">
+          <button type="button" class="chip active" data-value="all">Любой приоритет</button>
+          <button type="button" class="chip" data-value="high">Высокий</button>
+          <button type="button" class="chip" data-value="medium">Средний</button>
+          <button type="button" class="chip" data-value="low">Низкий</button>
+        </div>
+      </section>
+
+      <p id="message" class="message" role="alert" hidden></p>
+      <p id="counter" class="counter"></p>
+
+      <ul id="task-list" class="task-list"></ul>
+      <p id="empty" class="empty" hidden></p>
+    </div>
   </main>
 
   <script src="app.js"></script>
