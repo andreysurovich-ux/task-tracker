@@ -97,6 +97,21 @@ body {
   font-size: 0.95rem;
 }
 
+.btn-link {
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--accent);
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  align-self: center;
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+}
+
 .header h1 {
   margin: 0;
   font-size: 2.1rem;
@@ -217,6 +232,7 @@ body {
 
 .btn-primary:disabled,
 .btn-secondary:disabled,
+.btn-link:disabled,
 .btn-delete:disabled {
   opacity: 0.5;
   cursor: wait;

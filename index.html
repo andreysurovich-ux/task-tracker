@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Task Tracker</title>
-  <link rel="stylesheet" href="style.css">
+  <!-- ?v= меняется при каждом обновлении, чтобы браузер не показывал старую версию -->
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
   <main class="container">
@@ -28,7 +29,9 @@
         <input id="login-password" type="password" autocomplete="current-password" required>
       </label>
       <p id="login-error" class="form-error" hidden></p>
+      <p id="login-info" class="hint" hidden></p>
       <button type="submit" class="btn-primary">Войти</button>
+      <button type="button" id="forgot-password" class="btn-link">Забыли пароль?</button>
     </form>
 
     <!-- Новый пароль (по ссылке из письма) -->
@@ -83,6 +86,6 @@
     </div>
   </main>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>

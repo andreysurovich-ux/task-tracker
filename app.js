@@ -7,7 +7,7 @@ const AUTH_URL = SUPABASE_URL + '/auth/v1/';
 
 // Ключ, под которым задачи раньше хранились в браузере (нужен для переноса в базу)
 const OLD_STORAGE_KEY = 'task-tracker.tasks';
-// Ключ, под которым браузер запоминает вход
+// Ключ, под которым вкладка запоминает вход (до её закрытия)
 const SESSION_KEY = 'task-tracker.session';
 
 const PRIORITIES = { high: 'Высокий', medium: 'Средний', low: 'Низкий' };
@@ -30,6 +30,8 @@ const loginForm = document.getElementById('login-form');
 const loginEmail = document.getElementById('login-email');
 const loginPassword = document.getElementById('login-password');
 const loginError = document.getElementById('login-error');
+const loginInfo = document.getElementById('login-info');
+const forgotButton = document.getElementById('forgot-password');
 const passwordForm = document.getElementById('password-form');
 const newPassword = document.getElementById('new-password');
 const newPasswordRepeat = document.getElementById('new-password-repeat');
@@ -43,9 +45,12 @@ let session = readSession();
 
 // ---------- Вход ----------
 
+// Вход хранится только в этой вкладке: при новом открытии ссылки нужно войти заново
 function readSession() {
   try {
-    return JSON.parse(localStorage.getItem(SESSION_KEY));
+    // Раньше вход хранился бессрочно — убираем его
+    localStorage.removeItem(SESSION_KEY);
+    return JSON.parse(sessionStorage.getItem(SESSION_KEY));
   } catch (e) {
     return null;
   }
@@ -58,7 +63,7 @@ function saveSession(data) {
     expires_at: Math.floor(Date.now() / 1000) + Number(data.expires_in || 3600),
   };
   try {
-    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
   } catch (e) {
     // Не запомним вход — придётся входить заново после перезагрузки
   }
@@ -67,7 +72,7 @@ function saveSession(data) {
 function clearSession() {
   session = null;
   try {
-    localStorage.removeItem(SESSION_KEY);
+    sessionStorage.removeItem(SESSION_KEY);
   } catch (e) {
     // Нечего очищать
   }
@@ -118,6 +123,7 @@ function showLogin(text) {
   showView('login');
   loginError.textContent = text || '';
   loginError.hidden = !text;
+  loginInfo.hidden = true;
   loginPassword.value = '';
   (loginEmail.value ? loginPassword : loginEmail).focus();
 }
@@ -142,6 +148,7 @@ loginForm.addEventListener('submit', async (event) => {
   const button = loginForm.querySelector('button[type="submit"]');
   button.disabled = true;
   loginError.hidden = true;
+  loginInfo.hidden = true;
   try {
     saveSession(await authRequest('token?grant_type=password', {
       body: { email: loginEmail.value.trim(), password: loginPassword.value },
@@ -156,6 +163,34 @@ loginForm.addEventListener('submit', async (event) => {
     loginError.hidden = false;
   }
   button.disabled = false;
+});
+
+// «Забыли пароль?»: письмо со ссылкой, по которой можно задать новый пароль
+forgotButton.addEventListener('click', async () => {
+  loginError.hidden = true;
+  loginInfo.hidden = true;
+  const email = loginEmail.value.trim();
+  if (!email || !loginEmail.checkValidity()) {
+    loginError.textContent = 'Введите почту, и мы пришлём на неё ссылку для нового пароля.';
+    loginError.hidden = false;
+    loginEmail.focus();
+    return;
+  }
+
+  forgotButton.disabled = true;
+  try {
+    const back = location.origin + location.pathname;
+    await authRequest('recover?redirect_to=' + encodeURIComponent(back), { body: { email } });
+    loginInfo.textContent = 'Если эта почта зарегистрирована, на неё придёт письмо со ссылкой для нового пароля. Проверьте и папку «Спам».';
+    loginInfo.hidden = false;
+  } catch (e) {
+    loginError.textContent =
+      e.code === 'over_email_send_rate_limit'
+        ? 'Письмо уже отправлялось недавно. Подождите немного и попробуйте снова.'
+        : 'Не удалось отправить письмо. Попробуйте ещё раз.';
+    loginError.hidden = false;
+  }
+  forgotButton.disabled = false;
 });
 
 passwordForm.addEventListener('submit', async (event) => {
